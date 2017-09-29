@@ -1,15 +1,20 @@
 <?php
 /**
- * 配置
+ * 函数
  * Created by PhpStorm.
  * User: yutonghe
  * Date: 2017/9/28
  * Time: 14:00
  */
 
-//http请求
+/**
+ *      post方法请求
+ *      @param      string      $url            server url
+ *      @param      array       $postData       post数据
+ *      @return     json        $rs            接口返回数据,此demo中为返回json数据
+ */
 if (!function_exists('create_request')) {
-    function create_request($url, $postData = null, $IsPost = true)
+    function create_request($url, $postData)
     {
         try {
             $ch = curl_init();
@@ -27,30 +32,40 @@ if (!function_exists('create_request')) {
     }
 }
 
-//签名原始串
-if (!function_exists('get_query_str')) {
-    function get_query_str(array $data)
+/**
+ *       获取签名
+ *       创建md5摘要,规则是:按参数名称a-z排序,遇到空值的参数不参加签名。
+ *       @params         array               $data               参与签名的数组
+ *       @params         string              $key                商户密钥
+ *       @return         string              $sign               返回生成的sign
+ */
+if (!function_exists('getSign')) {
+    function getSign($data, $key)
     {
+        $query = '';
         ksort($data);
-        $i = 0;
-        $str = '';
-        foreach($data as $k => $v){
-            if($v != ''){
-                if($i > 0)$str .= '&';
-                $str .= $k.'='.$v;
-                $i++;
+        foreach($data as $k => $v) {
+            if("" != $v && "sign" != $k) {
+                $query .= $k . "=" . $v . "&";
             }
         }
-        return $str;
+        $query .= 'key='.$key;
+        $sign = strtoupper(MD5($query));
+        return $sign;
     }
 }
 
-//获取签名
-if (!function_exists('get_sign')) {
-    function get_sign(array $data, $key)
+/**
+ * 验证是否国银签名
+ * @params         array               $data               参与签名的数组
+ * @params         string              $gymchtKey          商户密钥
+ * @params         string              $sign               签名
+ * @return         bool                                    true:是 false:否
+ * */
+if (!function_exists('isGySign')) {
+    function isGySign($data,$gymchtKey,$sign)
     {
-        $query = get_query_str($data);
-        $sign = strtoupper(MD5($query.'&key='.$key));
-        return $sign;
+        $gySign = getSign($data,$gymchtKey);
+        return $sign==$gySign;
     }
 }

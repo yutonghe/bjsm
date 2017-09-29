@@ -26,7 +26,7 @@
 		<td>{{$result['gymchtId']}}</td>
 		<td>{{$result['tradeSn']}}</td>
 		<td>{{$result['transaction_id']}}</td>
-		<td>{{$result['orderAmount']}}</td>
+		<td>{{$result['orderAmount']/100}}</td>
 		<td>{{$result['t0Flag'] == 0 ? '否':'是'}}</td>
 		<td>{{$result['tradeStateName']}}</td>
 		@if($result['tradeState'] == 'SUCCESS')

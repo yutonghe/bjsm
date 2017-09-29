@@ -25,6 +25,10 @@ $router->group(['namespace' => 'Qrpay'], function() use ($router) {
     $router->get('/qr_info', [
         'as' => 'Qrpay.qr_info', 'uses' => 'QrpayController@queryNativePay',
     ]);
+    //扫码支付通知处理
+    $router->post('/qr_notify', [
+        'as' => 'Qrpay.qr_notify', 'uses' => 'QrpayController@getQrNotify',
+    ]);
 });
 
 
