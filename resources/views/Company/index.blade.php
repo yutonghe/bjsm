@@ -22,7 +22,7 @@
 			<img src="/assets/images/1481164132.jpg">
 			<div class="carousel-caption">
 				<h3>聚成付，想付就付!</h3>
-				<p>数科支付集成，让支付变得简单快捷</p>
+				<p>各方支付集成，让支付和收款更简单快捷</p>
 			</div>
 		</div>
 		<div class="item">
