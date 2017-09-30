@@ -9,7 +9,7 @@
 	<link rel="stylesheet" href="/assets/css/main.css">
 </head>
 <body>
-<div id="carousel-example-generic" class="carousel slide" data-ride="">
+<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
 	<!-- Indicators -->
 	<ol class="carousel-indicators">
 		<li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>

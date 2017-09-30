@@ -119,4 +119,9 @@ class QrpayController extends Controller
             return 'false';
         }
     }
+
+    //公众号支付
+    public function gzh_pay(){
+
+    }
 }
