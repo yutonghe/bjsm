@@ -92,31 +92,30 @@ class QrpayController extends Controller
 
     //扫码通知处理
     public function getQrNotify(Request $request){
-        $data = [
-            'gymchtId' => $request->input('gymchtId'),
-            'transaction' => $request->input('transaction'),
-            'tradeSn' => $request->input('tradeSn'),
-            'pay_result' => $request->input('pay_result'),
-            'pay_info' => $request->input('pay_info'),
-            'orderAmount' => $request->input('orderAmount'),
-            'coupon_fee' => $request->input('coupon_fee'),
-            'bankType' => $request->input('bankType'),
-            'timeEnd' => $request->input('timeEnd'),
-            'sign' => $request->input('sign'),
-            't0Flag' => $request->input('t0Flag'),
-            't0RespCode' => $request->input('t0RespCode'),
-            't0RespDesc' => $request->input('t0RespDesc'),
-        ];
-        if($request->input('t0Flag') == 1){
-            $data['t0_status'] = $request->input('t0_status');
-            $data['t0RespCode'] = $request->input('t0RespCode');
-            $data['t0RespDesc'] = $request->input('t0RespDesc');
-        }
+        $rs = file_get_contents("php://input");
+
+        $rs = json_decode($rs, true);
+
         $key = Config::get("common.mchtId.gymchtKeyT0");
-        if(isGySign($data,$key,$data['sign'])){
-            return 'suceess';
+        if(isGySign($rs,$key,$rs['sign']))
+        {
+            if($rs['pay_result'] == '0'){//0-成功 其他-失败
+                //更改订单状态;notify_url 有可能重复通知,商户系统需要做去重处理,避免多次发货
+
+                echo "success";
+                exit();
+            }else{
+                echo "failure";
+                exit();
+            }
+
         }else{
-            return 'false';
+            echo "failure";
         }
+    }
+
+    //公众号支付
+    public function gzh_pay(){
+
     }
 }

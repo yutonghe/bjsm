@@ -12,7 +12,7 @@
 */
 
 $router->get('/', function () use ($router) {
-    return $router->app->version();
+    return redirect('index');
 });
 
 //二维碼支付
@@ -30,5 +30,14 @@ $router->group(['namespace' => 'Qrpay'], function() use ($router) {
         'as' => 'Qrpay.qr_notify', 'uses' => 'QrpayController@getQrNotify',
     ]);
 });
+
+//门户网站
+$router->group(['namespace' => 'Company'], function() use ($router) {
+    //首页
+    $router->get('/index', [
+        'as' => 'Index.index', 'uses' => 'IndexController@index',
+    ]);
+});
+
 
 
