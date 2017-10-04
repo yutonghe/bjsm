@@ -29,6 +29,19 @@ $router->group(['namespace' => 'Qrpay'], function() use ($router) {
     $router->post('/qr_notify', [
         'as' => 'Qrpay.qr_notify', 'uses' => 'QrpayController@getQrNotify',
     ]);
+
+    //单笔代付
+    $router->get('/df_pay', [
+        'as' => 'Qrpay.df_pay', 'uses' => 'QrpayController@ondf_pay',
+    ]);
+    //代付查询
+    $router->get('/df_query_pay', [
+        'as' => 'Qrpay.df_query_pay', 'uses' => 'QrpayController@df_query_pay',
+    ]);
+    //代付余额查询
+    $router->get('/df_query', [
+        'as' => 'Qrpay.df_query', 'uses' => 'QrpayController@df_query',
+    ]);
 });
 
 //门户网站

@@ -16,12 +16,13 @@ use Illuminate\Http\Request;
 
 class QrpayController extends Controller
 {
+    private $conf = 'bjsm';
 
     //扫码支付
     public function qrpay(){
-        $url = Config::get("common.qr_code.getNativeUrl");
-        $gymcht = Config::get("common.mchtId.gymchtIdT0");
-        $key = Config::get("common.mchtId.gymchtKeyT0");
+        $url = Config::get("common.". $this->conf .".qr_pay.getNativeUrl");
+        $gymcht = Config::get("common.". $this->conf .".mchtId.gymchtIdT0");
+        $key = Config::get("common.". $this->conf .".mchtId.gymchtKeyT0");
         $tradeSn = date('YmdHis').rand(1000, 9999);
         $postData = [
             'gymchtId' => $gymcht,
@@ -30,7 +31,7 @@ class QrpayController extends Controller
             'goodsName' => '扫码支付测试',
             'expirySecond' => 500,
             'tradeSource' => '2',
-            'notifyUrl' => 'http://bjsm.com/getQrNotify',
+            'notifyUrl' => 'http://1860z45q02.51mypc.cn:11345/bjsm/public/getQrNotify',
             't0Flag' => '1',
         ];
         $postData['sign'] = getSign($postData, $key);
@@ -49,9 +50,9 @@ class QrpayController extends Controller
 
     //交易查询
     public function queryNativePay(){
-        $url = Config::get("common.qr_code.queryNativePayUrl");
-        $gymcht = Config::get("common.mchtId.gymchtIdT0");
-        $key = Config::get("common.mchtId.gymchtKeyT0");
+        $url = Config::get("common.". $this->conf .".qr_pay.queryNativePayUrl");
+        $gymcht = Config::get("common.". $this->conf .".mchtId.gymchtIdT0");
+        $key = Config::get("common.". $this->conf .".mchtId.gymchtKeyT0");
         $tradeSn = '1000001221_bjsm20';
         $postData = [
             'gymchtId' => $gymcht,
@@ -60,6 +61,7 @@ class QrpayController extends Controller
         ];
         $postData['sign'] = getSign($postData, $key);
         $result = create_request($url, $postData);
+        //dd($result);
         if($result['resultCode'] == '0000'){
             if(!isGySign($result,$key,$result['sign'])){
                 $result['resultCode'] = '5001';
@@ -93,10 +95,8 @@ class QrpayController extends Controller
     //扫码通知处理
     public function getQrNotify(Request $request){
         $rs = file_get_contents("php://input");
-
         $rs = json_decode($rs, true);
-
-        $key = Config::get("common.mchtId.gymchtKeyT0");
+        $key = Config::get("common.". $this->conf .".mchtId.gymchtKeyT0");
         if(isGySign($rs,$key,$rs['sign']))
         {
             if($rs['pay_result'] == '0'){//0-成功 其他-失败
@@ -118,4 +118,74 @@ class QrpayController extends Controller
     public function gzh_pay(){
 
     }
+
+    //单笔代付
+    public function ondf_pay(){
+        $url = Config::get("common.". $this->conf .".df_pay.singlePay");
+        $gymcht = Config::get("common.". $this->conf .".mchtId.gymchtIdT0");
+        $key = Config::get("common.". $this->conf .".mchtId.gymchtKeyT0");
+        $tradeSn = getRandomStr();
+        $postData = [
+            'gymchtId' => $gymcht,
+            'dfSn' => $tradeSn,
+            'receiptAmount' => 1,
+            'curType' => '1',
+            'payType' => '1',
+            'receiptName' => '余统和',
+            'receiptPan' => '6214837846493702',
+            'receiptBankNm' => '招商银行',
+            'settleNo' => '308584001792',
+            'acctType' => 0,
+            'mobile' => '15814695088',
+            'nonce' => getRandomStr(),
+        ];
+        $postData['sign'] = getSign($postData, $key);
+        //dd($postData);
+        $result = create_request($url, $postData);
+        dd($result);
+        $code = '';
+        if($result['resultCode'] == '0000'){
+            if(!isGySign($result,$key,$result['sign'])){
+                $result['resultCode'] = '5001';
+                $result['message'] = '数字签名错误';
+            }else{
+                $code = QrCode::size(300)->generate($result['code_url']);
+            }
+        }
+        return view("Qrpay.test")->with("result", $result)->with('code', $code);
+    }
+
+    //代付查询
+    public function df_query_pay(){
+        $url = Config::get("common.". $this->conf .".df_pay.querySinglePay");
+        $gymcht = Config::get("common.". $this->conf .".mchtId.gymchtIdT0");
+        $key = Config::get("common.". $this->conf .".mchtId.gymchtKeyT0");
+        $postData = [
+            'gymchtId' => $gymcht,
+            'dfSn' => date("YMDHIS"),
+            'dfTransactionId' => '1',
+            'nonce' => getRandomStr(),
+        ];
+        $postData['sign'] = getSign($postData, $key);
+        $result = create_request($url, $postData);
+        dd($result);
+    }
+
+    //余额查询
+    public function df_query(){
+        $url = Config::get("common.". $this->conf .".df_pay.queryAccount");
+        $gymcht = Config::get("common.". $this->conf .".mchtId.gymchtIdT0");
+        $key = Config::get("common.". $this->conf .".mchtId.gymchtKeyT0");
+        $postData = [
+            'gymchtId' => $gymcht,
+            'qryTime' => date("YMDHIS"),
+            'qryType' => '1',
+            'nonce' => getRandomStr(),
+
+        ];
+        $postData['sign'] = getSign($postData, $key);
+        $result = create_request($url, $postData);
+        dd($result);
+    }
+
 }

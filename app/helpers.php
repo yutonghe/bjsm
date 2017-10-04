@@ -69,3 +69,19 @@ if (!function_exists('isGySign')) {
         return $sign==$gySign;
     }
 }
+
+/**
+ * 生成32位随机字符串
+ * @params         int               str              生成位数
+ * */
+if (!function_exists('getRandomStr')) {
+    function getRandomStr($param = 32){
+        $str = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        $key = "";
+        for($i = 0; $i < $param; $i++)
+        {
+            $key .= $str{mt_rand(0,32)};    //生成php随机数
+        }
+        return $key;
+    }
+}
