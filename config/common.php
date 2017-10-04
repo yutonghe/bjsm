@@ -26,6 +26,12 @@ return [
             'querySinglePay' => "http://112.74.25.79:9999/gyprovider/daifu/querySinglePay.do",  //单笔代付查询
             'queryAccount' => 'http://112.74.25.79:9999/gyprovider/daifu/queryAccount.do',  //账户余额查询
         ],
+        //快捷支付
+        'kj_pay' => [
+            'prePay' => "http://112.74.25.79:9999/gyprovider/quickpay/prePay.do",  //快捷支付
+            'checkPay' => "http://112.74.25.79:9999/gyprovider/quickpay/checkPay.do",  //快捷支付验证
+            'queryPay' => 'http://112.74.25.79:9999/gyprovider/quickpay/queryPay.do',  //快捷交易查询
+        ]
     ],
 
     //聚成付
@@ -47,5 +53,11 @@ return [
             'querySinglePay' => "http://103.230.242.81:8888/bjshuma/daifu/querySinglePay.do",  //单笔代付查询
             'queryAccount' => 'http://103.230.242.81:8888/bjshuma/daifu/queryAccount.do',  //账户余额查询
         ],
+        //快捷支付
+        'kj_pay' => [
+            'prePay' => "http://103.230.242.81:8888/bjshuma/quickpay/prePay.do",  //快捷支付
+            'checkPay' => "http://103.230.242.81:8888/bjshuma/quickpay/checkPay.do",  //快捷支付验证
+            'queryPay' => 'http://103.230.242.81:8888/bjshuma/quickpay/queryPay.do',  //快捷交易查询
+        ]
     ]
 ];

@@ -188,4 +188,9 @@ class QrpayController extends Controller
         dd($result);
     }
 
+    //快捷支付
+    public function kj_pay(){
+
+    }
+
 }
