@@ -62,5 +62,14 @@ $router->group(['namespace' => 'Company'], function() use ($router) {
     ]);
 });
 
+//门户网站
+$router->group(['namespace' => 'Company'], function() use ($router) {
+    //首页
+    $router->get('/index', [
+        'as' => 'Index.index', 'uses' => 'IndexController@index',
+    ]);
+});
+
+
 
 

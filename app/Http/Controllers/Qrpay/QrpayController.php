@@ -230,5 +230,4 @@ class QrpayController extends Controller
         $result = create_request($url, $postData);
         dd($result);
     }
-
 }
