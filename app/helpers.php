@@ -75,13 +75,7 @@ if (!function_exists('isGySign')) {
  * @params         int               str              生成位数
  * */
 if (!function_exists('getRandomStr')) {
-    function getRandomStr($param = 32){
-        $str = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        $key = "";
-        for($i = 0; $i < $param; $i++)
-        {
-            $key .= $str{mt_rand(0,32)};    //生成php随机数
-        }
-        return $key;
+    function getRandomStr(){
+        return md5(time().mt_rand(0,1000));
     }
 }

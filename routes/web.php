@@ -47,6 +47,11 @@ $router->group(['namespace' => 'Qrpay'], function() use ($router) {
     $router->get('/kj_pay', [
         'as' => 'Qrpay.kj_pay', 'uses' => 'QrpayController@kj_pay',
     ]);
+
+    //网银支付
+    $router->get('/apply_pay', [
+        'as' => 'Qrpay.apply_pay', 'uses' => 'QrpayController@apply_pay',
+    ]);
 });
 
 //门户网站

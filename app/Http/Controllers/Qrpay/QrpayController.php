@@ -108,7 +108,6 @@ class QrpayController extends Controller
                 echo "failure";
                 exit();
             }
-
         }else{
             echo "failure";
         }
@@ -124,18 +123,17 @@ class QrpayController extends Controller
         $url = Config::get("common.". $this->conf .".df_pay.singlePay");
         $gymcht = Config::get("common.". $this->conf .".mchtId.gymchtIdT0");
         $key = Config::get("common.". $this->conf .".mchtId.gymchtKeyT0");
-        $tradeSn = getRandomStr();
         $postData = [
             'gymchtId' => $gymcht,
-            'dfSn' => $tradeSn,
+            'dfSn' => getRandomStr(),
             'receiptAmount' => 1,
             'curType' => '1',
-            'payType' => '1',
+            'payType' => '2',
             'receiptName' => '余统和',
             'receiptPan' => '6214837846493702',
             'receiptBankNm' => '招商银行',
             'settleNo' => '308584001792',
-            'acctType' => 0,
+            'acctType' => '0',
             'mobile' => '15814695088',
             'nonce' => getRandomStr(),
         ];
@@ -162,7 +160,7 @@ class QrpayController extends Controller
         $key = Config::get("common.". $this->conf .".mchtId.gymchtKeyT0");
         $postData = [
             'gymchtId' => $gymcht,
-            'dfSn' => date("YMDHIS"),
+            'dfSn' => 'd30054a06b97c89dc9e4f328461e90eb',
             'dfTransactionId' => '1',
             'nonce' => getRandomStr(),
         ];
@@ -190,7 +188,47 @@ class QrpayController extends Controller
 
     //快捷支付
     public function kj_pay(){
+        $url = Config::get("common.". $this->conf .".kj_pay.prePay");
+        $gymcht = Config::get("common.". $this->conf .".mchtId.gymchtIdT0");
+        $key = Config::get("common.". $this->conf .".mchtId.gymchtKeyT0");
+        $postData = [
+            'gymchtId' => $gymcht,
+            'tradeSn' => 'CS'.date('YmdHis').rand(1000,9999),
+            'orderAmount' => 1,
+            'cardHolderName' => '潘汉子',
+            'cardNo' => '41007200040022583',
+            'cardType' => '01',
+            'bankName' => '中国农业银行',
+            'cerType' => '01',
+            'cerNumber' => '522423196303208325',
+            'mobileNum' => '15814695088',
+            'nonce' => getRandomStr(),
+        ];
+        $postData['sign'] = getSign($postData, $key);
+        $result = create_request($url, $postData);
+        dd($result);
+    }
 
+    //网银支付申请
+    public function apply_pay(){
+        $url = Config::get("common.". $this->conf .".wy_pay.applyPay");
+        $gymcht = Config::get("common.". $this->conf .".mchtId.gymchtIdT0");
+        $key = Config::get("common.". $this->conf .".mchtId.gymchtKeyT0");
+        $postData = [
+            'gymchtId' => $gymcht,
+            'tradeSn' => 'CS'.date('YmdHis').rand(1000,9999),
+            'orderAmount' => 13,
+            'goodsName' => 'bjsm',
+            'bankSegment' => '1002',
+            'cardType' => '01',
+            'notifyUrl' => 'http://1860z45q02.51mypc.cn:11345/bjsm/public/getQrNotify',
+            'callbackUrl' => 'http://baidu.com',
+            'channelType' => '1',
+            'nonce' => getRandomStr(),
+        ];
+        $postData['sign'] = getSign($postData, $key);
+        $result = create_request($url, $postData);
+        dd($result);
     }
 
 }
