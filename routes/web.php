@@ -52,13 +52,9 @@ $router->group(['namespace' => 'Qrpay'], function() use ($router) {
     $router->get('/apply_pay', [
         'as' => 'Qrpay.apply_pay', 'uses' => 'QrpayController@apply_pay',
     ]);
-});
-
-//门户网站
-$router->group(['namespace' => 'Company'], function() use ($router) {
-    //首页
-    $router->get('/index', [
-        'as' => 'Index.index', 'uses' => 'IndexController@index',
+    //网银支付查询
+    $router->get('/wy_query', [
+        'as' => 'Qrpay.wy_query', 'uses' => 'QrpayController@wy_query',
     ]);
 });
 

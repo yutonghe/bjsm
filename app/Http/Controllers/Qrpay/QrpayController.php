@@ -30,7 +30,7 @@ class QrpayController extends Controller
             'orderAmount' => 1,
             'goodsName' => '扫码支付测试',
             'expirySecond' => 500,
-            'tradeSource' => '2',
+            'tradeSource' => '1',
             'notifyUrl' => 'http://1860z45q02.51mypc.cn:11345/bjsm/public/getQrNotify',
             't0Flag' => '1',
         ];
@@ -128,7 +128,7 @@ class QrpayController extends Controller
             'dfSn' => getRandomStr(),
             'receiptAmount' => 1,
             'curType' => '1',
-            'payType' => '2',
+            'payType' => '1',
             'receiptName' => '余统和',
             'receiptPan' => '6214837846493702',
             'receiptBankNm' => '招商银行',
@@ -219,11 +219,31 @@ class QrpayController extends Controller
             'tradeSn' => 'CS'.date('YmdHis').rand(1000,9999),
             'orderAmount' => 13,
             'goodsName' => 'bjsm',
-            'bankSegment' => '1002',
+            'bankSegment' => '1001',
             'cardType' => '01',
             'notifyUrl' => 'http://1860z45q02.51mypc.cn:11345/bjsm/public/getQrNotify',
             'callbackUrl' => 'http://baidu.com',
             'channelType' => '1',
+            'nonce' => getRandomStr(),
+        ];
+        $postData['sign'] = getSign($postData, $key);
+        $result = create_request($url, $postData);
+        if($result['resultCode'] == '0000'){
+            return redirect($result['payUrl']);
+        }else{
+            dd($result);
+        }
+    }
+
+    //网银支付查询
+    public function wy_query(){
+        $url = Config::get("common.". $this->conf .".wy_pay.queryPay");
+        $gymcht = Config::get("common.". $this->conf .".mchtId.gymchtIdT0");
+        $key = Config::get("common.". $this->conf .".mchtId.gymchtKeyT0");
+        $postData = [
+            'gymchtId' => $gymcht,
+            'tradeSn' => 'CS201710090128261858',
+            'orderAmount' => 13,
             'nonce' => getRandomStr(),
         ];
         $postData['sign'] = getSign($postData, $key);
